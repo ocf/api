@@ -20,7 +20,7 @@ pyasn1==0.4.8
 pydantic==1.6
 python-jose==3.1.0
 python-keycloak==0.22.0
-PyYAML==5.3.1
+PyYAML==5.4
 regex==2020.6.8
 requests==2.24.0
 rsa==4.6
