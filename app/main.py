@@ -11,7 +11,9 @@ keycloak_url = "https://auth.ocf.berkeley.edu/auth/"
 realm_name = "ocf"
 
 keycloak_openid = KeycloakOpenID(
-    server_url=keycloak_url, client_id="ocfapi", realm_name=realm_name,
+    server_url=keycloak_url,
+    client_id="ocfapi",
+    realm_name=realm_name,
 )
 
 app = FastAPI()
