@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import ocflib.lab.stats as labstats
 import ocflib.printing.printers as printstats
+import datetime
 
 # Keycloak setup
 from keycloak import KeycloakOpenID
@@ -85,6 +86,7 @@ async def get_homepage_stats():
 
 def get_pages_today():
     """Return a dict with the number of pages printed today by each printer"""
+    rn = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=-8)))
     with labstats.get_connection() as cursor:
         cursor.execute(
             """
@@ -94,16 +96,20 @@ def get_pages_today():
                 ORDER BY date ASC, printer ASC
         """
         )
-
         pages_today = {}
         last_seen = {printer: 0 for printer in printstats.PRINTERS}
-
+        # If it's not today or yesterday, skip the row
+        # If it's yesterday, add to last seen
+        # If it's today, add to pages_today based on last_seen
         for row in cursor:
+            date = row["date"]
             printer = row["printer"]
-            if printer in printstats.PRINTERS:
-                pages_today[printer] = row["value"] - last_seen[printer]
+            if (not (printer in printstats.PRINTERS)) or rn.day - date.day > 1:
+                continue
+            elif rn.day - date.day == 1:
                 last_seen[printer] = row["value"]
-
+            elif rn.day == date.day:
+                pages_today[printer] = row["value"] - last_seen[printer]
         return pages_today
 
         # Stuff from ocfweb, probably not using
