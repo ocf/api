@@ -78,10 +78,21 @@ async def get_homepage_stats():
     # users = labstats.users_in_lab_count()
     return {
         "Pages Printed": sum(get_pages_today().values()),
-        "Bandwidth Usage": 456,
+        "Mirror Bandwidth": get_weekly_bandwidth(),
         "Hours Farmed": 888,
         "Accounts Created": 13,
     }
+
+
+def get_weekly_bandwidth():
+    """Return the bandwidth used by all mirrors in the previous 7-day period
+    This should be in a human-readable format
+    """
+    week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+    bandwidth = 0
+    for tup in labstats.bandwidth_by_dist(week_ago):
+        bandwidth += tup[1]
+    return labstats.humanize_bytes(bandwidth)
 
 
 def get_pages_today():
