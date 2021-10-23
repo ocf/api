@@ -5,13 +5,6 @@ RUN apt-get update \
         cracklib-runtime \
         libcrack2 \
         libcrack2-dev \
-        # libffi-dev \
-        # libfreetype6-dev \
-        # libpng-dev \
-        # libssl-dev \
-        # libxft-dev \
-        # libxml2-dev \
-        # locales \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
