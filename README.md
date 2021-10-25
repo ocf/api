@@ -53,9 +53,5 @@ This won't work immediately, so do the following:
 	use mysql.ocf.berkeley.edu.
 3. To test integration with ocfstatic, you have to point requests at 
 the API, most likely `http://127.0.0.1:8000`, or the port specified by 
-uvicorn. You can do this by, on `ocfstatic`, going into 
-`gridsome.server.js` and changing the URL specified for `apiUrl`.  
-**Important: For deployment, you must change this back. Changing it 
-to `http://127.0.0.1:8000` is only for testing.**
-
+uvicorn.
 
