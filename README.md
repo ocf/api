@@ -47,7 +47,7 @@ This won't work immediately, so do the following:
 	to `'127.0.0.1'`
 	2. Open an ssh tunnel to Supernova (staff server) so that these requests can 
 	actually go through on port 3306. Use the command:  
-	`ssh bentref@supernova.ocf.berkeley.edu -L 3306:mysql:3306`
+	`ssh <username>@supernova.ocf.berkeley.edu -L 3306:mysql:3306`
 
 	At this point you should be able to locally access custom endpoints that 
 	use mysql.ocf.berkeley.edu.
