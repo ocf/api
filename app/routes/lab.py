@@ -5,6 +5,9 @@ from typing import Set
 from ocflib.infra.hosts import hostname_from_domain
 from ocflib.lab.stats import get_connection
 from ocflib.lab.stats import list_desktops
+from ocflib.lab.stats import staff_in_lab as real_staff_in_lab
+from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
+
 
 from . import router
 
@@ -38,3 +41,13 @@ def desktop_usage():
         "public_desktops_in_use": list(public_desktops_in_use),
         "public_desktops_num": len(public_desktops),
     }
+
+
+@router.get("/lab/num_users")
+def get_num_users_in_lab():
+    return real_users_in_lab_count()
+
+
+@router.get("/lab/staff")
+def get_staff_in_lab():
+    return real_staff_in_lab()
