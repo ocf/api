@@ -49,7 +49,7 @@ class Post(
             namespaces=_namespaces,
         )
         attrs["link"] = el_find.get("href")
-        return cls(**attrs)
+        return attrs
 
 
 def get_blog_posts() -> List[Any]:
