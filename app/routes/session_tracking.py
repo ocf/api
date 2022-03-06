@@ -1,20 +1,15 @@
-import json
 from enum import Enum
 from functools import partial
 from ipaddress import ip_address
-from typing import Any
-from typing import Dict
+from typing import Any, Dict, Optional
 
 from ocflib.infra.hosts import hosts_by_filter
-from ocflib.infra.net import ipv4_to_ipv6
-from ocflib.infra.net import is_ocf_ip
+from ocflib.infra.net import ipv4_to_ipv6, is_ocf_ip
 from ocflib.lab.stats import get_connection
 from fastapi import Request, HTTPException, status
+from pydantic import BaseModel
 
 from . import router
-
-
-State = Enum("State", ["active", "cleanup"])
 
 # FIXME: replace with secrets
 OCFSTATS_USER = "REPLACE_ME"
@@ -29,8 +24,18 @@ get_connection = partial(
 )
 
 
-@router.post("/session/log")
-def log_session(request: Request):
+class SessionState(str, Enum):
+    active = "active"
+    cleanup = "cleanup"
+
+
+class Session(BaseModel):
+    state: SessionState
+    user: Optional[str] = None
+
+
+@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT)
+def log_session(session: Session, request: Request):
     """Primary API endpoint for session tracking.
 
     Desktops have a cronjob that calls this endpoint: https://git.io/vpIKX
@@ -45,21 +50,23 @@ def log_session(request: Request):
         host = _get_desktops().get(remote_ip)
 
         if not host:
-            raise ValueError(f"IP {remote_ip} does not belong to a desktop")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"IP {remote_ip} does not belong to a desktop",
+            )
 
-        body = json.loads(request.body.decode("utf-8"))
-        state = State[body.get("state")]  # triggers KeyError
-        user = body.get("user")
+        state = session.state
+        user = session.user
 
-        if state is State.cleanup or not user:
+        if state is SessionState.cleanup or not user:
             # sessions also get periodically cleaned up: https://git.io/vpwg8
             _close_sessions(host)
-        elif state is State.active and _session_exists(host, user):
+        elif state is SessionState.active and _session_exists(host, user):
             _refresh_session(host, user)
         else:
             _new_session(host, user)
 
-        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
+        return
 
     except (KeyError, ValueError) as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e)
