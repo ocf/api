@@ -7,7 +7,7 @@ from ..utils.user import get_current_user
 
 
 @router.get("/quotas/paper")
-def paper_quota(current_user: dict = Depends(get_current_user)):
+async def paper_quota(current_user: dict = Depends(get_current_user)):
     try:
         with get_connection() as c:
             quota = get_quota(c, current_user["preferred_username"])

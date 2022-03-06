@@ -7,7 +7,7 @@ from . import router
 
 
 @router.get("/shorturl/{slug}", status_code=status.HTTP_301_MOVED_PERMANENTLY)
-def bounce_shorturl(slug: str, response: Response):
+async def bounce_shorturl(slug: str, response: Response):
     if slug:
         with get_connection() as ctx:
             target = get_shorturl(ctx, slug)

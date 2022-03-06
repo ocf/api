@@ -31,7 +31,7 @@ def _get_desktops_in_use() -> Set[Any]:
 
 
 @router.get("/lab/desktops")
-def desktop_usage():
+async def desktop_usage():
     public_desktops = _list_public_desktops()
 
     desktops_in_use = _get_desktops_in_use()
@@ -44,10 +44,10 @@ def desktop_usage():
 
 
 @router.get("/lab/num_users")
-def get_num_users_in_lab():
+async def get_num_users_in_lab():
     return real_users_in_lab_count()
 
 
 @router.get("/lab/staff")
-def get_staff_in_lab():
+async def get_staff_in_lab():
     return real_staff_in_lab()
