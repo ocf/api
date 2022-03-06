@@ -7,6 +7,8 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:8080",
+    "https://new.ocf.berkeley.edu",
+    "https://www.ocf.berkeley.edu",
 ]
 
 app.add_middleware(
