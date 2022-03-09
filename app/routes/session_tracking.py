@@ -10,17 +10,15 @@ from fastapi import Request, HTTPException, status
 from pydantic import BaseModel
 
 from . import router
+from ..config import get_settings
 
-# FIXME: replace with secrets
-OCFSTATS_USER = "REPLACE_ME"
-OCFSTATS_PASSWORD = "REPLACE_ME"
-OCFSTATS_DB = "REPLACE_ME"
+settings = get_settings()
 
 get_connection = partial(
     get_connection,
-    user=OCFSTATS_USER,
-    password=OCFSTATS_PASSWORD,
-    db=OCFSTATS_DB,
+    user=settings.ocfstats_user,
+    password=settings.ocfstats_password,
+    db=settings.ocfstats_db,
 )
 
 
