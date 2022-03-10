@@ -7,6 +7,13 @@ class Settings(BaseSettings):
     ocfstats_password: str
     ocfstats_db: str
 
+    redis_host: str
+    redis_port: str
+    redis_password: str
+
+    debug: bool = False
+    version: str = "dev"
+
     class Config:
         env_file = ".env"
 
