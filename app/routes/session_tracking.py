@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from . import router
 from ..utils.config import get_settings
+from ..utils.cache import cache
 
 settings = get_settings()
 
@@ -118,6 +119,7 @@ def _close_sessions(host: str) -> None:
         )
 
 
+@cache(600)
 def _get_desktops() -> Dict[Any, Any]:
     """Return IPv4 and 6 address to fqdn mapping for OCF desktops from LDAP."""
 

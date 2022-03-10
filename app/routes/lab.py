@@ -10,12 +10,15 @@ from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
 
 
 from . import router
+from ..utils.cache import periodic, cache
 
 
+@cache()
 def _list_public_desktops() -> List[Any]:
     return list_desktops(public_only=True)
 
 
+@periodic(5)
 def _get_desktops_in_use() -> Set[Any]:
     """List which desktops are currently in use."""
 

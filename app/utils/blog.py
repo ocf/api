@@ -9,6 +9,8 @@ import requests
 from cached_property import cached_property
 from requests.exceptions import RequestException
 
+from .cache import periodic
+
 _namespaces = {"atom": "http://www.w3.org/2005/Atom"}
 
 
@@ -52,6 +54,7 @@ class Post(
         return attrs
 
 
+@periodic(60)
 def get_blog_posts() -> List[Any]:
     """Parse the beautiful OCF status blog atom feed into a list of Posts.
 
