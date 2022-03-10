@@ -23,8 +23,12 @@ def cache_lookup(key: Hashable) -> Any:
     # return value for when a key is missing. This allows us to still
     # cache functions which return None.
     cache_miss_sentinel: Dict[Any, Any] = {}
-    r = get_redis_connection()
-    retval = r.get(key, cache_miss_sentinel)
+    try:
+        r = get_redis_connection()
+        retval = r.get(key, cache_miss_sentinel)
+    except Exception:
+        retval = cache_miss_sentinel
+
     is_hit = retval is not cache_miss_sentinel
 
     if not is_hit:
@@ -70,8 +74,12 @@ def cache_lookup_with_fallback(
         return result
     except KeyError:
         result = fallback()
-        r = get_redis_connection()
-        r.set(key, result, ttl)
+        try:
+            r = get_redis_connection()
+            r.set(key, result, ttl)
+        except Exception:
+            pass
+
         return result
 
 
