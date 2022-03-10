@@ -5,7 +5,6 @@ RUN apt-get update \
         cracklib-runtime \
         libcrack2 \
         libcrack2-dev \
-        redis-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
