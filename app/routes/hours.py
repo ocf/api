@@ -8,9 +8,14 @@ from ..utils.cache import periodic
 from . import router
 
 
+@periodic(60)
+def _get_staff_hours():
+    return real_get_staff_hours()
+
+
 @router.get("/hours/staff")
 async def get_staff_hours():
-    return real_get_staff_hours()
+    return _get_staff_hours()
 
 
 @periodic(60)
