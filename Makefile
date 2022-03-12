@@ -14,3 +14,7 @@ push-image:
 .PHONY: dev
 dev:
 	chmod u+x venv/bin/activate && . venv/bin/activate && python -m uvicorn app.main:app --reload --host $(HOST) --port $(PORT)
+
+.PHONY: test
+test:
+	python -m pytest
