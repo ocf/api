@@ -31,7 +31,12 @@ spec:
           env:
           - name: MAX_WORKERS
             value: "4"
-          image: "docker.ocf.berkeley.edu/ocfapi:<%= version%>"
+          - name: VERSION
+            value: "<%= version %>"
+          envFrom:
+          - secretRef:
+              name: ocfapi
+          image: "docker.ocf.berkeley.edu/ocfapi:<%= version %>"
           ports:
             - containerPort: 80
 ---
