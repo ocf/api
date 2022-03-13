@@ -1,3 +1,3 @@
 servicePipeline(
-    upstreamProjects: [],
+    upstreamProjects: ['ocf/ocflib/master'],
 )

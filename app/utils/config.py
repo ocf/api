@@ -1,0 +1,23 @@
+from pydantic import BaseSettings
+from functools import lru_cache
+
+
+class Settings(BaseSettings):
+    ocfstats_user: str = "waddles"
+    ocfstats_password: str = "shhverysecret"
+    ocfstats_db: str = "ocfstats"
+
+    redis_host: str = "127.0.0.1"
+    redis_port: int = 6379
+    redis_password: str = "shhverysecret"
+
+    debug: bool = False
+    version: str = "dev"
+
+    class Config:
+        env_file = ".env"
+
+
+@lru_cache()
+def get_settings():
+    return Settings()
