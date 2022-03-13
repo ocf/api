@@ -10,8 +10,8 @@ from fastapi import Request, HTTPException, status
 from pydantic import BaseModel
 
 from . import router
-from ..utils.config import get_settings
-from ..utils.cache import cache
+from utils.config import get_settings
+from utils.cache import cache
 
 settings = get_settings()
 

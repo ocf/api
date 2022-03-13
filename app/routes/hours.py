@@ -3,7 +3,7 @@ from ocflib.lab.hours import read_hours_listing, HoursListing
 from ocflib.lab.staff_hours import get_staff_hours as real_get_staff_hours
 from fastapi import HTTPException
 
-from ..utils.cache import periodic
+from utils.cache import periodic
 
 from . import router
 

@@ -21,7 +21,8 @@ venv: requirements.txt requirements-dev.txt
 dev:
 	chmod u+x venv/bin/activate && \
 	. venv/bin/activate && \
-	python -m uvicorn app.main:app --reload --host $(HOST) --port $(PORT)
+	cd app && \
+	python -m uvicorn main:app --reload --host $(HOST) --port $(PORT)
 
 .PHONY: test
 test: venv unit-test
@@ -30,6 +31,7 @@ test: venv unit-test
 unit-test:
 	chmod u+x venv/bin/activate && \
 	. venv/bin/activate && \
+	cd app && \
 	python -m pytest
 
 .PHONY: update-requirements

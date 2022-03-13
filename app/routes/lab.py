@@ -10,7 +10,7 @@ from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
 
 
 from . import router
-from ..utils.cache import periodic, cache
+from utils.cache import periodic, cache
 
 
 @cache()
