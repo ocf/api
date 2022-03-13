@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, status
 from . import router
 
 from ocflib.printing.quota import get_connection, get_quota
-from ..utils.user import get_current_user
+from utils.user import get_current_user
 
 
 @router.get("/quotas/paper")
