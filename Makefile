@@ -11,10 +11,28 @@ cook-image:
 push-image:
 	docker push $(DOCKER_TAG)
 
+venv: requirements.txt requirements-dev.txt
+	python3 -m venv venv && \
+	. venv/bin/activate && \
+	pip install --upgrade "pip>=20.3" && \
+	pip install -r requirements.txt -r requirements-dev.txt
+
 .PHONY: dev
 dev:
-	chmod u+x venv/bin/activate && . venv/bin/activate && python -m uvicorn app.main:app --reload --host $(HOST) --port $(PORT)
+	chmod u+x venv/bin/activate && \
+	. venv/bin/activate && \
+	python -m uvicorn app.main:app --reload --host $(HOST) --port $(PORT)
 
 .PHONY: test
-test:
+test: venv unit-test
+
+.PHONY: unit-test
+unit-test:
+	chmod u+x venv/bin/activate && \
+	. venv/bin/activate && \
 	python -m pytest
+
+.PHONY: update-requirements
+update-requirements: venv
+	$(BIN)/upgrade-requirements
+	sed -i 's/^ocflib==.*/ocflib/' requirements.txt
