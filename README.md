@@ -4,19 +4,14 @@ An authenticated API for the OCF.
 
 # Developing locally
 
-## Setup
-
 ```
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-pre-commit install
+make dev
 ```
 
-## Running
+## Running tests
 
 ```
-python -m uvicorn app.main:app --reload
+make test
 ```
 
 # Testing
