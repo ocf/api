@@ -15,6 +15,7 @@ venv: | venv/pyvenv.cfg
 
 venv/pyvenv.cfg: requirements.txt requirements-dev.txt
 	python3 -m venv venv && \
+	chmod u+x venv/bin/activate && \
 	. venv/bin/activate && \
 	pip install --upgrade "pip>=20.3" && \
 	pip install -r requirements.txt -r requirements-dev.txt && \
@@ -22,15 +23,13 @@ venv/pyvenv.cfg: requirements.txt requirements-dev.txt
 
 .PHONY: dev
 dev: venv
-	@chmod u+x venv/bin/activate && \
-	. venv/bin/activate && \
+	@. venv/bin/activate && \
 	cd app && \
 	python -m uvicorn main:app --reload --host $(HOST) --port $(PORT)
 
 .PHONY: test
 test: venv
-	@chmod u+x venv/bin/activate && \
-	. venv/bin/activate && \
+	@. venv/bin/activate && \
 	cd app && \
 	python -m pytest
 
