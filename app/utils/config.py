@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     redis_port: int = 6379
     redis_password: str = "shhverysecret"
 
+    celery_broker: str = "redis://127.0.0.1:6378"
+    celery_backend: str = "redis://127.0.0.1:6378"
+
     debug: bool = False
     version: str = "dev"
 
