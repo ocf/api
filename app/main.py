@@ -11,7 +11,7 @@ app = FastAPI(
     version=settings.version,
     license_info={
         "name": "GNU GPLv3 and Apache 2.0",
-        "url": "https://github.com/ocf/ocfweb/blob/master/LICENSE",
+        "url": "https://github.com/ocf/api/blob/master/LICENSE",
     },
     openapi_tags=[
         {"name": "lab_stats"},
