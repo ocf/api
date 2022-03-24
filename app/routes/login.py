@@ -1,8 +1,8 @@
-from fastapi import Cookie, HTTPException, status
+from fastapi import Cookie, HTTPException, status, Header
 from fastapi.responses import RedirectResponse
 from ocflib.ucb.cas import CAS_URL, verify_ticket
-from utils.calnet import SERVICE_URL, create_calnet_jwt
-import urllib.parse
+from utils.calnet import create_calnet_jwt, get_calnet_service_url
+from urllib.parse import urljoin, quote_plus
 from typing import Optional
 
 from . import router
@@ -13,15 +13,18 @@ async def calnet_login(
     next: Optional[str] = None,
     ticket: Optional[str] = None,
     calnet_redirect_url: Optional[str] = Cookie(None),
+    host: Optional[str] = Header(None),
 ):
     if next:
         response = RedirectResponse(
-            CAS_URL + f"login?service={urllib.parse.quote_plus(SERVICE_URL)}"
-        )  # TODO: get the current host from the raw request to redirect back to
+            urljoin(
+                CAS_URL, f"login?service={quote_plus(get_calnet_service_url(host))}"
+            )
+        )
         response.set_cookie("calnet_redirect_url", next)
         return response
     if ticket:
-        uid = verify_ticket(ticket, SERVICE_URL)
+        uid = verify_ticket(ticket, get_calnet_service_url(host))
         if not uid:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, "got bad ticket")
         jwt = create_calnet_jwt(uid)

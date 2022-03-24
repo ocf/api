@@ -1,3 +1,4 @@
+import re
 from fastapi import Depends, HTTPException, status
 from fastapi.security.http import HTTPBearer
 from jose import jwt
@@ -6,8 +7,9 @@ from math import floor
 from typing import Dict, Union
 import os
 from utils.constants import API_HOST
+from urllib.parse import urljoin
+from utils.config import get_settings
 
-SERVICE_URL = f"{API_HOST}/login/calnet"
 __JWT_SECRET = os.getrandom(32).hex()
 JWT_AUDIENCE = "ocfapi_calnet"
 
@@ -53,3 +55,14 @@ def verify_calnet_jwt(payload: Dict[str, str]) -> bool:
 
 def decode_calnet_jwt(calnet_jwt: str) -> Dict[str, str]:
     return jwt.decode(calnet_jwt, __JWT_SECRET)
+
+
+def get_calnet_service_url(host: str = API_HOST) -> str:
+    settings = get_settings()
+    if not re.match("^https?://", host):
+        if settings.debug:
+            host = "http://" + host
+        else:
+            host = "https://" + host
+    url = urljoin(host, "/login/calnet")
+    return url
