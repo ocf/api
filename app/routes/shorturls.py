@@ -7,7 +7,9 @@ from fastapi.exceptions import HTTPException
 from . import router
 
 
-@router.get("/shorturl/{slug}", status_code=status.HTTP_301_MOVED_PERMANENTLY)
+@router.get(
+    "/shorturl/{slug}", status_code=status.HTTP_301_MOVED_PERMANENTLY, tags=["misc"]
+)
 async def bounce_shorturl(slug: str):
     if slug:
         with get_connection() as ctx:

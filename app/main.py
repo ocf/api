@@ -1,8 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import router
+from utils.config import get_settings
 
-app = FastAPI()
+settings = get_settings()
+
+app = FastAPI(
+    title="OCF API",
+    description="[https://github.com/ocf/api](https://github.com/ocf/api)",
+    version=settings.version,
+    license_info={
+        "name": "GNU GPLv3 and Apache 2.0",
+        "url": "https://github.com/ocf/ocfweb/blob/master/LICENSE",
+    },
+    openapi_tags=[
+        {"name": "lab_stats"},
+        {"name": "lab_hours"},
+        {"name": "account"},
+        {"name": "misc"},
+    ],
+)
 
 origins = [
     "http://localhost",
@@ -20,9 +37,9 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/", tags=["misc"])
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Welcome to the OCF API!"}
 
 
 app.include_router(router)

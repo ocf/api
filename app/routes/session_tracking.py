@@ -33,7 +33,7 @@ class Session(BaseModel):
     user: Optional[str] = None
 
 
-@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT, tags=["misc"])
 def log_session(session: Session, request: Request):
     """Primary API endpoint for session tracking.
 

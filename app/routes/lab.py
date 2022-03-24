@@ -33,7 +33,7 @@ def _get_desktops_in_use() -> Set[Any]:
     return {hostname_from_domain(session["host"]) for session in c}
 
 
-@router.get("/lab/desktops")
+@router.get("/lab/desktops", tags=["lab_stats"])
 async def desktop_usage():
     public_desktops = _list_public_desktops()
 
@@ -46,11 +46,11 @@ async def desktop_usage():
     }
 
 
-@router.get("/lab/num_users")
+@router.get("/lab/num_users", tags=["lab_stats"])
 async def get_num_users_in_lab():
     return real_users_in_lab_count()
 
 
-@router.get("/lab/staff")
+@router.get("/lab/staff", tags=["lab_stats"])
 async def get_staff_in_lab():
     return real_staff_in_lab()

@@ -8,7 +8,7 @@ from typing import Optional
 from . import router
 
 
-@router.get("/login/calnet")
+@router.get("/login/calnet", tags=["account"])
 async def calnet_login(
     next: Optional[str] = None,
     ticket: Optional[str] = None,

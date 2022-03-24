@@ -13,7 +13,7 @@ def _get_staff_hours():
     return real_get_staff_hours()
 
 
-@router.get("/hours/staff")
+@router.get("/hours/staff", tags=["lab_hours"])
 async def get_staff_hours():
     return _get_staff_hours()
 
@@ -23,12 +23,12 @@ def get_hours_listing() -> HoursListing:
     return read_hours_listing()
 
 
-@router.get("/hours/today")
+@router.get("/hours/today", tags=["lab_hours"])
 async def get_hours_today():
     return get_hours_listing().hours_on_date()[0]
 
 
-@router.get("/hours/{date}")
+@router.get("/hours/{date}", tags=["lab_hours"])
 async def get_hours_date(date: str):
     try:
         # date formatted as ISO 8601 (e.g. 2022-02-22)
