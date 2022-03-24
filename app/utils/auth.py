@@ -21,6 +21,9 @@ KEYCLOAK_PUBLIC_KEY = (
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl=f"{keycloak_url}realms/{realm_name}/protocol/openid-connect/auth",
     tokenUrl=f"{keycloak_url}realms/{realm_name}/protocol/openid-connect/token",
+    scheme_name="keycloak_auth",
+    description="""Regular authentication through Keycloak
+                which gives access to user-specific endpoints.""",
 )
 
 

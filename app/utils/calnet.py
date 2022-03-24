@@ -13,8 +13,14 @@ from utils.config import get_settings
 __JWT_SECRET = os.getrandom(32).hex()
 JWT_AUDIENCE = "ocfapi_calnet"
 
+calnet_jwt_auth_scheme = HTTPBearer(
+    scheme_name="calnet_jwt",
+    description="""JWT that authorizes a user to take
+                actions on behalf of a CalNet UID.""",
+)
 
-def get_calnet_uid(calnet_jwt: str = Depends(HTTPBearer())) -> int:
+
+def get_calnet_uid(calnet_jwt: str = Depends(calnet_jwt_auth_scheme)) -> int:
     payload = decode_calnet_jwt(calnet_jwt)
     if not verify_calnet_jwt(payload):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "malformed jwt")
