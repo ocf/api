@@ -1,12 +1,20 @@
 import logging
 from fastapi import Depends, HTTPException, status
-from . import router
-
 from ocflib.printing.quota import get_connection, get_quota
 from utils.user import get_current_user
+from pydantic import BaseModel
 
 
-@router.get("/quotas/paper", tags=["account"])
+from . import router
+
+
+class PaperQuotaResponse(BaseModel):
+    user: str
+    daily: int
+    semesterly: int
+
+
+@router.get("/quotas/paper", tags=["account"], response_model=PaperQuotaResponse)
 async def paper_quota(current_user: dict = Depends(get_current_user)):
     try:
         with get_connection() as c:

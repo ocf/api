@@ -1,12 +1,13 @@
-from typing import Any
-from typing import List
-from typing import Set
+from typing import List, Set
+from pydantic import BaseModel
 
 from ocflib.infra.hosts import hostname_from_domain
-from ocflib.lab.stats import get_connection
-from ocflib.lab.stats import list_desktops
-from ocflib.lab.stats import staff_in_lab as real_staff_in_lab
-from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
+from ocflib.lab.stats import (
+    get_connection,
+    list_desktops,
+    staff_in_lab as real_staff_in_lab,
+    users_in_lab_count as real_users_in_lab_count,
+)
 
 
 from . import router
@@ -14,12 +15,12 @@ from utils.cache import periodic, cache
 
 
 @cache()
-def _list_public_desktops() -> List[Any]:
+def _list_public_desktops() -> List[str]:
     return list_desktops(public_only=True)
 
 
 @periodic(5)
-def _get_desktops_in_use() -> Set[Any]:
+def _get_desktops_in_use() -> Set[str]:
     """List which desktops are currently in use."""
 
     # https://github.com/ocf/ocflib/blob/90f9268a89ac9d53c089ab819c1aa95bdc38823d/ocflib/lab/ocfstats.sql#L70
@@ -33,7 +34,12 @@ def _get_desktops_in_use() -> Set[Any]:
     return {hostname_from_domain(session["host"]) for session in c}
 
 
-@router.get("/lab/desktops", tags=["lab_stats"])
+class DesktopUsageResponse(BaseModel):
+    public_desktops_in_use: List[str]
+    public_desktops_num: int
+
+
+@router.get("/lab/desktops", tags=["lab_stats"], response_model=DesktopUsageResponse)
 async def desktop_usage():
     public_desktops = _list_public_desktops()
 

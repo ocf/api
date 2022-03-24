@@ -1,7 +1,9 @@
 from datetime import date as date_type
+from typing import Optional
 from ocflib.lab.hours import read_hours_listing, HoursListing
 from ocflib.lab.staff_hours import get_staff_hours as real_get_staff_hours
 from fastapi import HTTPException
+from pydantic import BaseModel
 
 from utils.cache import periodic
 
@@ -23,12 +25,20 @@ def get_hours_listing() -> HoursListing:
     return read_hours_listing()
 
 
-@router.get("/hours/today", tags=["lab_hours"])
+class HoursResponse(BaseModel):
+    open: Optional[str]
+    close: Optional[str]
+
+
+@router.get("/hours/today", tags=["lab_hours"], response_model=HoursResponse)
 async def get_hours_today():
-    return get_hours_listing().hours_on_date()[0]
+    hours = get_hours_listing().hours_on_date()
+    if len(hours) == 0:
+        return {}
+    return hours[0]
 
 
-@router.get("/hours/{date}", tags=["lab_hours"])
+@router.get("/hours/{date}", tags=["lab_hours"], response_model=HoursResponse)
 async def get_hours_date(date: str):
     try:
         # date formatted as ISO 8601 (e.g. 2022-02-22)
