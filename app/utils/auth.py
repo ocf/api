@@ -1,4 +1,5 @@
 from fastapi.security import OAuth2AuthorizationCodeBearer
+from typing_extensions import TypedDict
 
 # Keycloak setup
 from keycloak import KeycloakOpenID
@@ -27,7 +28,28 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 )
 
 
-def decode_token(token: str):
+class UserToken(TypedDict):
+    exp: int
+    iat: int
+    auth_time: int
+    jti: str
+    iss: str
+    aud: str
+    sub: str
+    typ: str
+    azp: str
+    session_state: str
+    acr: str
+    scope: str
+    sid: str
+    email_verified: bool
+    name: str
+    preferred_username: str
+    given_name: str
+    email: str
+
+
+def decode_token(token: str) -> UserToken:
     return keycloak_openid.decode_token(
         token,
         key=KEYCLOAK_PUBLIC_KEY,
