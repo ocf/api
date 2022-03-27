@@ -25,12 +25,12 @@ def get_hours_listing() -> HoursListing:
     return read_hours_listing()
 
 
-class HoursResponse(BaseModel):
+class HoursOutput(BaseModel):
     open: Optional[str]
     close: Optional[str]
 
 
-@router.get("/hours/today", tags=["lab_hours"], response_model=HoursResponse)
+@router.get("/hours/today", tags=["lab_hours"], response_model=HoursOutput)
 async def get_hours_today():
     hours = get_hours_listing().hours_on_date()
     if len(hours) == 0:
@@ -38,7 +38,7 @@ async def get_hours_today():
     return hours[0]
 
 
-@router.get("/hours/{date}", tags=["lab_hours"], response_model=HoursResponse)
+@router.get("/hours/{date}", tags=["lab_hours"], response_model=HoursOutput)
 async def get_hours_date(date: str):
     try:
         # date formatted as ISO 8601 (e.g. 2022-02-22)

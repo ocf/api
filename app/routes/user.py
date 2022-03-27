@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from utils.user import get_current_user
 
 
-class UserResponse(BaseModel):
+class GetUserOutput(BaseModel):
     exp: int
     iat: int
     auth_time: int
@@ -27,6 +27,6 @@ class UserResponse(BaseModel):
     email: str
 
 
-@router.get("/user", tags=["account"], response_model=UserResponse)
+@router.get("/user", tags=["account"], response_model=GetUserOutput)
 async def get_user(current_user: dict = Depends(get_current_user)):
     return JSONResponse(content=current_user)  # will bypass output field limiting

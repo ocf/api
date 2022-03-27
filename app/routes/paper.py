@@ -8,13 +8,13 @@ from pydantic import BaseModel
 from . import router
 
 
-class PaperQuotaResponse(BaseModel):
+class PaperQuotaOutput(BaseModel):
     user: str
     daily: int
     semesterly: int
 
 
-@router.get("/quotas/paper", tags=["account"], response_model=PaperQuotaResponse)
+@router.get("/quotas/paper", tags=["account"], response_model=PaperQuotaOutput)
 async def paper_quota(current_user: dict = Depends(get_current_user)):
     try:
         with get_connection() as c:

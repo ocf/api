@@ -34,12 +34,12 @@ def _get_desktops_in_use() -> Set[str]:
     return {hostname_from_domain(session["host"]) for session in c}
 
 
-class DesktopUsageResponse(BaseModel):
+class DesktopUsageOutput(BaseModel):
     public_desktops_in_use: List[str]
     public_desktops_num: int
 
 
-@router.get("/lab/desktops", tags=["lab_stats"], response_model=DesktopUsageResponse)
+@router.get("/lab/desktops", tags=["lab_stats"], response_model=DesktopUsageOutput)
 async def desktop_usage():
     public_desktops = _list_public_desktops()
 

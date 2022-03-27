@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 from routes import router
 
 
-class RequestBody(BaseModel):
+class VHostRequestInput(BaseModel):
     subdomain: str = Field(
         min_length=1, max_length=32, regex=r"^([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}$"
     )
@@ -40,7 +40,7 @@ class RequestBody(BaseModel):
     },
 )
 def request_vhost(
-    data: RequestBody,
+    data: VHostRequestInput,
     request: Request,
     user_token: UserToken = Depends(get_current_user),
 ):

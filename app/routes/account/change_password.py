@@ -21,7 +21,7 @@ CALLINK_ERROR_MSG = (
 )
 
 
-class ChangePasswordBody(BaseModel):
+class ChangePasswordInput(BaseModel):
     account: str
     new_password: str
 
@@ -36,7 +36,9 @@ class ChangePasswordBody(BaseModel):
         status.HTTP_500_INTERNAL_SERVER_ERROR: {},
     },
 )
-async def change_password(data: ChangePasswordBody, calnet_uid=Depends(get_calnet_uid)):
+async def change_password(
+    data: ChangePasswordInput, calnet_uid=Depends(get_calnet_uid)
+):
     accounts = get_accounts_for(calnet_uid)
     try:
         accounts += get_accounts_signatory_for(calnet_uid)

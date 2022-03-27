@@ -28,13 +28,13 @@ class SessionState(str, Enum):
     cleanup = "cleanup"
 
 
-class Session(BaseModel):
+class LogSessionInput(BaseModel):
     state: SessionState
     user: Optional[str] = None
 
 
 @router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT, tags=["misc"])
-def log_session(session: Session, request: Request):
+def log_session(session: LogSessionInput, request: Request):
     """Primary API endpoint for session tracking.
 
     Desktops have a cronjob that calls this endpoint: https://git.io/vpIKX
