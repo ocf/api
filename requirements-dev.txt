@@ -42,7 +42,9 @@ toml==0.10.2
 tomli==1.2.3
 trio==0.20.0
 typed-ast==1.4.3
+types-cryptography==3.3.18
 types-orjson==3.6.0
+types-paramiko==2.8.17
 types-requests==2.27.14
 types-ujson==0.1.1
 types-urllib3==1.26.11

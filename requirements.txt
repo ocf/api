@@ -1,6 +1,7 @@
 amqp==5.1.0
 anyio==3.5.0
 attrs==21.4.0
+bcrypt==3.2.0
 billiard==3.6.4.0
 cached-property==1.5.2
 celery==5.1.2
@@ -12,6 +13,7 @@ click-didyoumean==0.3.0
 click-plugins==1.1.1
 click-repl==0.2.0
 cracklib==2.9.3
+cryptography==36.0.2
 Deprecated==1.2.13
 dnspython==2.2.1
 ecdsa==0.17.0
@@ -25,6 +27,7 @@ kombu==5.2.4
 ldap3==2.9.1
 MarkupSafe==2.1.1
 ocflib
+paramiko==2.7.2
 pexpect==4.8.0
 ply==3.11
 prompt-toolkit==3.0.28
