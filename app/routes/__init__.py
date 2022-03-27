@@ -1,8 +1,9 @@
 # "borrowed" from https://github.com/tiangolo/fastapi/issues/2916#issuecomment-818260637
 
-from fastapi import APIRouter
-from importlib import import_module
 import os
+from importlib import import_module
+
+from fastapi import APIRouter
 
 router = APIRouter()
 

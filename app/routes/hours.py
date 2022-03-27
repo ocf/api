@@ -1,13 +1,14 @@
 from datetime import date as date_type
 from typing import Optional
-from ocflib.lab.hours import read_hours_listing, HoursListing
+
+from ocflib.lab.hours import HoursListing, read_hours_listing
 from ocflib.lab.staff_hours import get_staff_hours as real_get_staff_hours
+
 from fastapi import HTTPException
 from pydantic import BaseModel
 
+from routes import router
 from utils.cache import periodic
-
-from . import router
 
 
 @periodic(60)

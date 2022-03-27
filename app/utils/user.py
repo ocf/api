@@ -1,7 +1,8 @@
 import logging
+
 from fastapi import Depends, HTTPException, status
 
-from utils.auth import oauth2_scheme, decode_token, UserToken
+from utils.auth import UserToken, decode_token, oauth2_scheme
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserToken:

@@ -1,11 +1,13 @@
-from fastapi import Cookie, HTTPException, status, Header
-from fastapi.responses import RedirectResponse
-from ocflib.ucb.cas import CAS_URL, verify_ticket
-from utils.calnet import create_calnet_jwt, get_calnet_service_url
-from urllib.parse import urljoin, quote_plus
 from typing import Optional
+from urllib.parse import quote_plus, urljoin
 
-from . import router
+from ocflib.ucb.cas import CAS_URL, verify_ticket
+
+from fastapi import Cookie, Header, HTTPException, status
+from fastapi.responses import RedirectResponse
+
+from routes import router
+from utils.calnet import create_calnet_jwt, get_calnet_service_url
 
 
 @router.get("/login/calnet", tags=["account"])

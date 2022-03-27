@@ -1,19 +1,18 @@
 from typing import Any, Iterator, List
-from ocflib.account.search import users_by_calnet_uid
-from ocflib.ucb.groups import groups_by_student_signat
-from ocflib.ucb.directory import name_by_calnet_uid
+
 from requests.exceptions import ReadTimeout
 
-from fastapi import Depends, HTTPException, status, Response
+from ocflib.account.search import users_by_calnet_uid
+from ocflib.ucb.directory import name_by_calnet_uid
+from ocflib.ucb.groups import groups_by_student_signat
+
+from fastapi import Depends, HTTPException, Response, status
 from pydantic import BaseModel
 
-from utils.calnet import get_calnet_uid
-from utils.constants import TESTER_CALNET_UIDS, TEST_OCF_ACCOUNTS
-from utils.celery import (
-    change_password as change_password_task,
-)
-
 from routes import router
+from utils.calnet import get_calnet_uid
+from utils.celery import change_password as change_password_task
+from utils.constants import TEST_OCF_ACCOUNTS, TESTER_CALNET_UIDS
 
 CALLINK_ERROR_MSG = (
     "Couldn't connect to CalLink API. Resetting group "

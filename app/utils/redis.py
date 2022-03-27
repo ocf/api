@@ -1,6 +1,8 @@
 from functools import lru_cache
+
 import redis
-from .config import get_settings
+
+from utils.config import get_settings
 
 
 @lru_cache()

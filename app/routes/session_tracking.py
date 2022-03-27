@@ -6,12 +6,13 @@ from typing import Any, Dict, Optional
 from ocflib.infra.hosts import hosts_by_filter
 from ocflib.infra.net import ipv4_to_ipv6, is_ocf_ip
 from ocflib.lab.stats import get_connection
-from fastapi import Request, HTTPException, status
+
+from fastapi import HTTPException, Request, status
 from pydantic import BaseModel
 
-from . import router
-from utils.config import get_settings
+from routes import router
 from utils.cache import cache
+from utils.config import get_settings
 
 settings = get_settings()
 

@@ -3,20 +3,19 @@ import socket
 from textwrap import dedent
 from typing import Optional
 
-from utils.user import get_current_user
-from utils.auth import UserToken
-from utils.config import get_settings
-
 from ocflib.account.search import user_attrs
 from ocflib.misc.mail import send_mail
 from ocflib.misc.validators import host_exists, valid_email
 from ocflib.misc.whoami import current_user_formatted_email
 from ocflib.vhost.web import eligible_for_vhost, has_vhost
 
-from fastapi import Depends, Request, HTTPException, status, Response
+from fastapi import Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel, Field
 
 from routes import router
+from utils.auth import UserToken
+from utils.config import get_settings
+from utils.user import get_current_user
 
 
 class VHostRequestInput(BaseModel):

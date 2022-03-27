@@ -1,6 +1,5 @@
+from routes import router
 from utils.blog import get_blog_posts as real_get_blog_posts
-
-from . import router
 
 
 @router.get("/announce/blog", tags=["misc"])

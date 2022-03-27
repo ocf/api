@@ -1,8 +1,8 @@
 from fastapi import Depends
 from fastapi.responses import JSONResponse
-from . import router
 from pydantic import BaseModel
 
+from routes import router
 from utils.user import get_current_user
 
 

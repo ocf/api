@@ -1,17 +1,14 @@
 from typing import List, Set
-from pydantic import BaseModel
 
 from ocflib.infra.hosts import hostname_from_domain
-from ocflib.lab.stats import (
-    get_connection,
-    list_desktops,
-    staff_in_lab as real_staff_in_lab,
-    users_in_lab_count as real_users_in_lab_count,
-)
+from ocflib.lab.stats import get_connection, list_desktops
+from ocflib.lab.stats import staff_in_lab as real_staff_in_lab
+from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
 
+from pydantic import BaseModel
 
-from . import router
-from utils.cache import periodic, cache
+from routes import router
+from utils.cache import cache, periodic
 
 
 @cache()

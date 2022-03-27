@@ -1,10 +1,10 @@
-from ocflib.misc.shorturls import get_connection
-from ocflib.misc.shorturls import get_shorturl
+from ocflib.misc.shorturls import get_connection, get_shorturl
 
 from fastapi import status
-from fastapi.responses import RedirectResponse
 from fastapi.exceptions import HTTPException
-from . import router
+from fastapi.responses import RedirectResponse
+
+from routes import router
 
 
 @router.get(

@@ -7,7 +7,9 @@ rather than from ocflib directly.
 import ssl
 
 from celery import Celery
+
 from ocflib.account.submission import get_tasks as real_get_tasks
+
 from utils.config import get_settings
 
 settings = get_settings()

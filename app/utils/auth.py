@@ -1,8 +1,8 @@
-from fastapi.security import OAuth2AuthorizationCodeBearer
-from typing_extensions import TypedDict
-
 # Keycloak setup
 from keycloak import KeycloakOpenID
+from typing_extensions import TypedDict
+
+from fastapi.security import OAuth2AuthorizationCodeBearer
 
 keycloak_url = "https://auth.ocf.berkeley.edu/auth/"
 realm_name = "ocf"

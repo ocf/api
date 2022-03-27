@@ -1,30 +1,28 @@
 from typing import List, Optional
-from ocflib.account import search
-import ocflib.ucb.directory as directory
+
 from Crypto.PublicKey import RSA
+
+import ocflib.ucb.directory as directory
+from ocflib.account import search
 from ocflib.account.creation import (
     CREATE_PUBLIC_KEY,
-    encrypt_password,
     NewAccountRequest,
-    validate_username,
-    validate_password,
+    encrypt_password,
     valid_email,
+    validate_password,
+    validate_username,
 )
 from ocflib.account.search import user_attrs_ucb
 from ocflib.account.submission import NewAccountResponse
 from ocflib.ucb.groups import group_by_oid, groups_by_student_signat
 
-from routes import router
-
 from fastapi import Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
+from routes import router
 from utils.calnet import get_calnet_uid
+from utils.celery import celery_app, validate_then_create_account
 from utils.constants import TEST_GROUP_ACCOUNTS, TESTER_CALNET_UIDS
-from utils.celery import (
-    validate_then_create_account,
-    celery_app,
-)
 
 
 class RegisterAccountInput(BaseModel):

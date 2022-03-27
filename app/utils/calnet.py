@@ -1,14 +1,17 @@
-import re
-from fastapi import Depends, HTTPException, status
-from fastapi.security.http import HTTPBearer, HTTPAuthorizationCredentials
-from jose import jwt, JWTError
-from time import time
-from math import floor
-from typing import Dict, Union
 import os
-from utils.constants import API_HOST
+import re
+from math import floor
+from time import time
+from typing import Dict, Union
 from urllib.parse import urljoin
+
+from jose import JWTError, jwt
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
+
 from utils.config import get_settings
+from utils.constants import API_HOST
 
 settings = get_settings()
 
