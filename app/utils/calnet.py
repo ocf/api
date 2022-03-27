@@ -50,9 +50,9 @@ def create_calnet_jwt(uid: Union[int, str]) -> str:
     )
 
 
-def verify_calnet_jwt(payload: Dict[str, str]) -> bool:
+def verify_calnet_jwt(payload: Dict[str, Union[str, int]]) -> bool:
     try:
-        if payload["aud"] != JWT_AUDIENCE:
+        if str(payload["aud"]) != JWT_AUDIENCE:
             return False
         if float(payload["iat"]) > time():
             return False
@@ -66,7 +66,7 @@ def verify_calnet_jwt(payload: Dict[str, str]) -> bool:
     return True
 
 
-def decode_calnet_jwt(calnet_jwt: str) -> Dict[str, str]:
+def decode_calnet_jwt(calnet_jwt: str) -> Dict[str, Union[str, int]]:
     # the verification through python-jose is
     # not as good as what we can do ourselves
     return jwt.decode(
