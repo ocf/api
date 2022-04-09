@@ -7,7 +7,7 @@ from ocflib.infra.hosts import hosts_by_filter
 from ocflib.infra.net import ipv4_to_ipv6, is_ocf_ip
 from ocflib.lab.stats import get_connection
 
-from fastapi import HTTPException, Request, status
+from fastapi import HTTPException, Request, Response, status
 from pydantic import BaseModel
 
 from routes import router
@@ -66,7 +66,7 @@ def log_session(session: LogSessionInput, request: Request):
         else:
             _new_session(host, user)
 
-        return
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     except (KeyError, ValueError) as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e)
