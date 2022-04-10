@@ -37,3 +37,4 @@ test: venv
 update-requirements: venv
 	@venv/bin/upgrade-requirements
 	@sed -i 's/^ocflib==.*/ocflib/' requirements.txt
+	@make venv

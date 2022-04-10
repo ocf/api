@@ -8,8 +8,8 @@ from typing import Any, Callable, Dict, Hashable, Iterable, Optional, Tuple
 
 from cached_property import cached_property
 
-from .config import get_settings
-from .redis import get_redis_connection
+from utils.config import get_settings
+from utils.redis import get_redis_connection
 
 _logger = logging.getLogger(__name__)
 

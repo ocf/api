@@ -6,12 +6,13 @@ from typing import Any, Dict, Optional
 from ocflib.infra.hosts import hosts_by_filter
 from ocflib.infra.net import ipv4_to_ipv6, is_ocf_ip
 from ocflib.lab.stats import get_connection
-from fastapi import Request, HTTPException, status
+
+from fastapi import HTTPException, Request, Response, status
 from pydantic import BaseModel
 
-from . import router
-from utils.config import get_settings
+from routes import router
 from utils.cache import cache
+from utils.config import get_settings
 
 settings = get_settings()
 
@@ -28,13 +29,13 @@ class SessionState(str, Enum):
     cleanup = "cleanup"
 
 
-class Session(BaseModel):
+class LogSessionInput(BaseModel):
     state: SessionState
     user: Optional[str] = None
 
 
-@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT)
-def log_session(session: Session, request: Request):
+@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT, tags=["misc"])
+def log_session(session: LogSessionInput, request: Request):
     """Primary API endpoint for session tracking.
 
     Desktops have a cronjob that calls this endpoint: https://git.io/vpIKX
@@ -65,7 +66,7 @@ def log_session(session: Session, request: Request):
         else:
             _new_session(host, user)
 
-        return
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     except (KeyError, ValueError) as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e)

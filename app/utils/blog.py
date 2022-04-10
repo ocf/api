@@ -1,7 +1,5 @@
 from collections import namedtuple
-from typing import Any
-from typing import Dict
-from typing import List
+from typing import Any, Dict, List
 from xml.etree import ElementTree as etree
 
 import dateutil.parser
@@ -9,7 +7,7 @@ import requests
 from cached_property import cached_property
 from requests.exceptions import RequestException
 
-from .cache import periodic
+from utils.cache import periodic
 
 _namespaces = {"atom": "http://www.w3.org/2005/Atom"}
 

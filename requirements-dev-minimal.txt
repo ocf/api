@@ -3,3 +3,5 @@ fastapi[test]==0.75.0
 pre-commit==2.15.0
 pytest==6.2.5
 requirements-tools
+types-paramiko
+types-requests
