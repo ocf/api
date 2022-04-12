@@ -1,4 +1,5 @@
-from typing import List, Set
+from datetime import datetime
+from typing import List, Optional, Set
 
 from ocflib.infra.hosts import hostname_from_domain
 from ocflib.lab.stats import get_connection, list_desktops
@@ -14,6 +15,11 @@ from utils.cache import cache, periodic
 @cache()
 def _list_public_desktops() -> List[str]:
     return list_desktops(public_only=True)
+
+
+@cache()
+def _list_desktops() -> List[str]:
+    return list_desktops()
 
 
 @periodic(5)
@@ -32,28 +38,41 @@ def _get_desktops_in_use() -> Set[str]:
 
 
 class DesktopUsageOutput(BaseModel):
-    public_desktops_in_use: List[str]
-    public_desktops_num: int
+    desktops_in_use: List[str]
+    desktops_num: int
 
 
 @router.get("/lab/desktops", tags=["lab_stats"], response_model=DesktopUsageOutput)
 async def desktop_usage():
-    public_desktops = _list_public_desktops()
-
     desktops_in_use = _get_desktops_in_use()
-    public_desktops_in_use = desktops_in_use.intersection(public_desktops)
+    all_desktops = _list_desktops()
 
     return {
-        "public_desktops_in_use": list(public_desktops_in_use),
-        "public_desktops_num": len(public_desktops),
+        "desktops_in_use": list(desktops_in_use),
+        "desktops_num": len(all_desktops),
     }
 
 
-@router.get("/lab/num_users", tags=["lab_stats"])
+class NumUsersOutput(BaseModel):
+    num_users: int
+
+
+@router.get("/lab/num_users", tags=["lab_stats"], response_model=NumUsersOutput)
 async def get_num_users_in_lab():
-    return real_users_in_lab_count()
+    return {"num_users": real_users_in_lab_count()}
 
 
-@router.get("/lab/staff", tags=["lab_stats"])
+class StaffSession(BaseModel):
+    user: str
+    host: str
+    start: datetime
+    end: Optional[datetime]
+
+
+class StaffInLabOutput(BaseModel):
+    staff_in_lab: List[StaffSession]
+
+
+@router.get("/lab/staff", tags=["lab_stats"], response_model=StaffInLabOutput)
 async def get_staff_in_lab():
-    return real_staff_in_lab()
+    return {"staff_in_lab": [s._asdict() for s in real_staff_in_lab()]}
