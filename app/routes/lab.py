@@ -38,18 +38,24 @@ def _get_desktops_in_use() -> Set[str]:
 
 
 class DesktopUsageOutput(BaseModel):
-    desktops_in_use: List[str]
-    desktops_num: int
+    all_desktops_in_use: List[str]
+    all_desktops_num: int
+    public_desktops_in_use: List[str]
+    public_desktops_num: int
 
 
 @router.get("/lab/desktops", tags=["lab_stats"], response_model=DesktopUsageOutput)
 async def desktop_usage():
     desktops_in_use = _get_desktops_in_use()
     all_desktops = _list_desktops()
+    public_desktops = _list_public_desktops()
+    public_desktops_in_use = desktops_in_use.intersection(public_desktops)
 
     return {
-        "desktops_in_use": list(desktops_in_use),
-        "desktops_num": len(all_desktops),
+        "all_desktops_in_use": list(desktops_in_use),
+        "all_desktops_num": len(all_desktops),
+        "public_desktops_in_use": list(public_desktops_in_use),
+        "public_desktops_num": len(public_desktops),
     }
 
 
