@@ -27,7 +27,9 @@ class RenewPasswordOutput(BaseModel):
     output: str
 
 
-@router.post("/account/renew-password", tags=["account"], response_model=RenewPasswordOutput)
+@router.post(
+    "/account/renew-password", tags=["account"], response_model=RenewPasswordOutput
+)
 def renew_password(data: RenewPasswordInput):
     try:
         validators.validate_username(data.username)
@@ -46,11 +48,17 @@ def renew_password(data: RenewPasswordInput):
     try:
         result = child.expect(["incorrect", "unknown", pexpect.EOF, "expired"])
         if result == 0:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication failed")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication failed"
+            )
         elif result == 1:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unknown user")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Unknown user"
+            )
         elif result == 2:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password not expired")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Password not expired"
+            )
         else:
             child.sendline(data.new_password)
             child.expect("\r\nRepeat new password:")
