@@ -22,7 +22,7 @@ app = FastAPI(
     ],
 )
 
-origins = ["http://localhost:8000", "http://ocf", "https://new.ocf.berkeley.edu"]
+origins = ["https://new.ocf.berkeley.edu"]
 
 app.add_middleware(
     CORSMiddleware,
