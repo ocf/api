@@ -2,7 +2,7 @@ import pexpect
 
 import ocflib.account.validators as validators
 
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException
 from pydantic import BaseModel, Field
 
 from routes import router
