@@ -105,5 +105,5 @@ def get_calnet_service_url(host: str = API_HOST) -> str:
             host = "http://" + host
         else:
             host = "https://" + host
-    url = urljoin(host, "/login/calnet")
+    url = urljoin(host, "/login/calnet/callback")
     return url
