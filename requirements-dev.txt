@@ -46,6 +46,6 @@ types-paramiko==2.8.17
 types-requests==2.27.16
 types-ujson==0.1.1
 types-urllib3==1.26.11
-ujson==4.3.0
+ujson==5.2.0
 virtualenv==20.14.0
 Werkzeug==2.1.1
