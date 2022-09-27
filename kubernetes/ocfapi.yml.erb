@@ -29,11 +29,20 @@ spec:
       containers:
         - name: ocfapi
           env:
-          - name: MAX_WORKERS
-            value: "4"
+            - name: MAX_WORKERS
+              value: "4"
           image: "docker.ocf.berkeley.edu/ocfapi:<%= version%>"
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: ocfweb-ocf
+              mountPath: /etc/ocf
+              readOnly: true
+      volumes:
+        - name: ocfweb-ocf
+          hostPath:
+            path: /etc/ocf
+            type: Directory
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
