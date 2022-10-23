@@ -1,7 +1,7 @@
 DOCKER_REVISION ?= testing-$(USER)
 DOCKER_TAG = docker-push.ocf.berkeley.edu/ocfapi:$(DOCKER_REVISION)
 HOST = 127.0.0.1
-PORT = 8000
+PORT = 8001
 
 .PHONY: cook-image
 cook-image:
