@@ -26,3 +26,8 @@ TEST_GROUP_ACCOUNTS = (
     (46692, "Awesome Group of Awesome"),  # boo another real OID
     (92029, "eXperimental Computing Facility"),  # our sister org
 )
+
+OCFSTAFF_GROUP = "ocfstaff"
+OCFOFFICERS_GROUP = "ocfofficers"
+OCFROOT_GROUP = "ocfroot"
+OPSTAFF_GROUP = "opstaff"
