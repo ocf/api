@@ -31,25 +31,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserToken:
 def depends_get_current_user_with_group(
     group: Union[OCFSTAFF_GROUP, OCFOFFICERS_GROUP, OCFROOT_GROUP, OPSTAFF_GROUP],
 ) -> Callable[[str], UserToken]:
-    async def get_current_user_with_group(token: str = Depends(oauth2_scheme)):
-        try:
-            user_token = decode_token(token)
-            if group not in user_token.get("realm_access").get("roles"):
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Invalid permissions to access resource",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )
-            return user_token
-        except HTTPException:
-            raise
-        except Exception as e:
-            logging.error(e)
+    async def get_current_user_with_group(
+        user_token: UserToken = Depends(get_current_user),
+    ):
+        if group not in user_token.get("realm_access").get("roles"):
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication credentials",
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Invalid permissions to access resource",
                 headers={"WWW-Authenticate": "Bearer"},
             )
+        return user_token
 
     return get_current_user_with_group
 
