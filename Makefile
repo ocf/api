@@ -31,7 +31,9 @@ dev: venv
 test: venv
 	@. venv/bin/activate && \
 	cd app && \
-	python -m pytest
+	python -m pytest && \
+	cd .. && \
+	venv/bin/check-requirements
 
 .PHONY: update-requirements
 update-requirements: venv
