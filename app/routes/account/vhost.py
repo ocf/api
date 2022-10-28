@@ -43,7 +43,7 @@ def request_vhost(
     request: Request,
     user_token: UserToken = Depends(get_current_user),
 ):
-    user = user_token["preferred_username"]
+    user = user_token.username
 
     if has_vhost(user):
         raise HTTPException(

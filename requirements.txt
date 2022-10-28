@@ -46,7 +46,7 @@ pysmi==0.3.4
 pysnmp==4.4.12
 python-dateutil==2.8.2
 python-dotenv==0.19.2
-python-jose==3.3.0
+python-jose[cryptography]==3.3.0
 python-multipart==0.0.5
 pytz==2022.1
 PyYAML==6.0

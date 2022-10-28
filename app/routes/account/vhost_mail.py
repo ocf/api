@@ -44,7 +44,7 @@ class VHostMailOutput(BaseModel):
 
 @router.get("/account/vhost/mail", tags=["account"], response_model=VHostMailOutput)
 def vhost_mail(user_token: UserToken = Depends(get_current_group_user)):
-    user = user_token["preferred_username"]
+    user = user_token.username
     vhosts = []
 
     with _txn() as c:
@@ -75,7 +75,7 @@ class VHostMailUpdateInput(BaseModel):
 def vhost_mail_update(
     data: VHostMailUpdateInput, user_token: UserToken = Depends(get_current_group_user)
 ):
-    user = user_token["preferred_username"]
+    user = user_token.username
 
     # _get_addr may return None, but never with this particular call
     addr_info = _get_addr(data.addr, user, required=True)
@@ -153,7 +153,7 @@ class VHostMailExportInput(BaseModel):
 def vhost_mail_csv_export(
     data: VHostMailExportInput, user_token: UserToken = Depends(get_current_group_user)
 ):
-    user = user_token["preferred_username"]
+    user = user_token.username
     domain = data.domain
     vhost = _get_vhost(user, domain)
     if not vhost:
@@ -187,7 +187,7 @@ def vhost_mail_csv_import(
     csv_file: bytes = File(None, media_type="text/csv"),
     user_token: UserToken = Depends(get_current_group_user),
 ):
-    user = user_token["preferred_username"]
+    user = user_token.username
     domain = data.domain
     vhost = _get_vhost(user, domain)
     if not vhost:

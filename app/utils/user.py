@@ -34,7 +34,7 @@ def depends_get_current_user_with_group(
     async def get_current_user_with_group(
         user_token: UserToken = Depends(get_current_user),
     ):
-        if group not in user_token.get("realm_access").get("roles"):
+        if group not in user_token.groups:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Invalid permissions to access resource",
@@ -48,7 +48,7 @@ def depends_get_current_user_with_group(
 async def get_current_group_user(
     user_token: UserToken = Depends(get_current_user),
 ) -> UserToken:
-    if not user_is_group(user_token["preferred_username"]):
+    if not user_is_group(user_token.username):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Account is not a group",
