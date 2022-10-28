@@ -2,6 +2,7 @@ celery[redis]==5.2.6
 fastapi==0.75.1
 ocflib
 paramiko==2.10.1
+pexpect==4.8.0
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 python-jose==3.3.0
