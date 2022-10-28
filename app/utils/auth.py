@@ -12,17 +12,24 @@ keycloak_url = "https://auth.ocf.berkeley.edu/auth/"
 realm_name = "ocf"
 client_id = "ocfapi"
 
+
+class RealmMetadata(TypedDict):
+    realm: str
+    public_key: str
+
+
 realm_metadata_request = requests.get(f"{keycloak_url}realms/{realm_name}")
-if realm_metadata_request.status_code >= 400:
+if not realm_metadata_request.ok:
     logging.fatal(realm_metadata_request.text)
     raise Exception("Unable to fetch Keycloak realm metadata")
 
-realm_metadata = realm_metadata_request.json()
+realm_metadata: RealmMetadata = realm_metadata_request.json()
+raw_public_key = realm_metadata.get("public_key")
+if not raw_public_key:
+    raise Exception("`public_key` not present in realm metadata")
 
 KEYCLOAK_PUBLIC_KEY = (
-    "-----BEGIN PUBLIC KEY-----\n"
-    + realm_metadata["public_key"]
-    + "\n-----END PUBLIC KEY-----"
+    "-----BEGIN PUBLIC KEY-----\n" + raw_public_key + "\n-----END PUBLIC KEY-----"
 )
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
