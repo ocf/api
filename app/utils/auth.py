@@ -1,21 +1,27 @@
 # Keycloak setup
-from keycloak import KeycloakOpenID
+import logging
+from typing import List
+
+import requests
+from jose import jwt
 from typing_extensions import TypedDict
 
 from fastapi.security import OAuth2AuthorizationCodeBearer
 
 keycloak_url = "https://auth.ocf.berkeley.edu/auth/"
 realm_name = "ocf"
+client_id = "ocfapi"
 
-keycloak_openid = KeycloakOpenID(
-    server_url=keycloak_url,
-    client_id="ocfapi",
-    realm_name=realm_name,
-)
+realm_metadata_request = requests.get(f"{keycloak_url}realms/{realm_name}")
+if realm_metadata_request.status_code >= 400:
+    logging.fatal(realm_metadata_request.text)
+    raise Exception("Unable to fetch Keycloak realm metadata")
+
+realm_metadata = realm_metadata_request.json()
 
 KEYCLOAK_PUBLIC_KEY = (
     "-----BEGIN PUBLIC KEY-----\n"
-    + keycloak_openid.public_key()
+    + realm_metadata["public_key"]
     + "\n-----END PUBLIC KEY-----"
 )
 
@@ -26,6 +32,10 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
     description="""Regular authentication through Keycloak
                 which gives access to user-specific endpoints.""",
 )
+
+
+class RealmAccess(TypedDict):
+    roles: List[str]
 
 
 class UserToken(TypedDict):
@@ -47,11 +57,13 @@ class UserToken(TypedDict):
     preferred_username: str
     given_name: str
     email: str
+    realm_access: RealmAccess
 
 
 def decode_token(token: str) -> UserToken:
-    return keycloak_openid.decode_token(
+    return jwt.decode(
         token,
         key=KEYCLOAK_PUBLIC_KEY,
+        audience=client_id,
         options={"verify_signature": True, "verify_aud": False, "exp": True},
     )
