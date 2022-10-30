@@ -93,10 +93,7 @@ class UserToken:
             raise Exception("scope is None")
         self.scope = _scope
 
-        _groups = raw_token.get("groups")
-        if _groups is None:
-            raise Exception("groups is None")
-        self.groups = _groups
+        self.groups = raw_token.get("groups", [])
 
         self.raw = raw_token
 
