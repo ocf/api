@@ -22,11 +22,10 @@ app = FastAPI(
     ],
 )
 
-origins = ["https://new.ocf.berkeley.edu"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origin_regex=r"https://([^.]+\.)?new\.ocf\.berkeley\.edu",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
