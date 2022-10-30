@@ -25,7 +25,7 @@ dashboard at `localhost:8000/docs`.
 
 You can even test authenticated
 endpoints by logging in on that page with OCF Keycloak SSO. Use a `client_id` of
-`ocfapi` and a blank client secret, and it should log you in.
+`ocfstatic` and a blank client secret, and it should log you in.
 
 ## Test setup with ocfstatic (and perhaps other projects too)
 

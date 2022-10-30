@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     ocfstats_password: str = "shhverysecret"
     ocfstats_db: str = "ocfstats"
 
+    ocfprinting_user: str = "waddles"
+    ocfprinting_password: str = "shhverysecret"
+    ocfprinting_db: str = "ocfprinting"
+
     redis_host: str = "127.0.0.1"
     redis_port: int = 6379
     redis_password: str = "shhverysecret"
