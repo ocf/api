@@ -415,9 +415,9 @@ settings = get_settings()
 @contextmanager
 def _txn(**kwargs: Any) -> Generator[Any, None, None]:
     with get_connection(
-        user=settings.OCFMAIL_USER,
-        password=settings.OCFMAIL_PASSWORD,
-        db=settings.OCFMAIL_DB,
+        user=settings.ocfmail_user,
+        password=settings.ocfmail_password,
+        db=settings.ocfmail_db,
         autocommit=False,
         **kwargs,
     ) as c:

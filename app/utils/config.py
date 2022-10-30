@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     ocfstats_password: str = "shhverysecret"
     ocfstats_db: str = "ocfstats"
 
+    ocfmail_user: str = "waddles"
+    ocfmail_password: str = "shhverysecret"
+    ocfmail_db: str = "ocfmail"
+
     ocfprinting_user: str = "waddles"
     ocfprinting_password: str = "shhverysecret"
     ocfprinting_db: str = "ocfprinting"
