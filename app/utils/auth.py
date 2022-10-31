@@ -103,7 +103,7 @@ def decode_token(token: str) -> UserToken:
         token,
         key=KEYCLOAK_PUBLIC_KEY,
         audience=client_id,
-        algorithms="RS256",
+        algorithms=["RS256"],
         options={"verify_aud": False, "require_exp": True},
     )
 
