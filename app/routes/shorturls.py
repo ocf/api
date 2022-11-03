@@ -8,7 +8,9 @@ from routes import router
 
 
 @router.get(
-    "/shorturl/{slug}", status_code=status.HTTP_301_MOVED_PERMANENTLY, tags=["misc"]
+    "/shorturls/bounce/{slug}",
+    status_code=status.HTTP_308_PERMANENT_REDIRECT,
+    tags=["misc"],
 )
 async def bounce_shorturl(slug: str):
     if slug:
@@ -17,7 +19,7 @@ async def bounce_shorturl(slug: str):
 
         if target:
             return RedirectResponse(
-                target, status_code=status.HTTP_301_MOVED_PERMANENTLY
+                target, status_code=status.HTTP_308_PERMANENT_REDIRECT
             )
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
