@@ -15,9 +15,12 @@ app = FastAPI(
         "url": "https://github.com/ocf/api/blob/master/LICENSE",
     },
     openapi_tags=[
-        {"name": "lab_stats"},
-        {"name": "lab_hours"},
         {"name": "account"},
+        {"name": "auth"},
+        {"name": "lab_hours"},
+        {"name": "lab_stats"},
+        {"name": "meetings"},
+        {"name": "shorturls"},
         {"name": "misc"},
     ],
 )
