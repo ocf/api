@@ -1,5 +1,7 @@
 import logging
-from typing import Callable, Union
+from typing import Callable
+
+from typing_extensions import Literal
 
 from ocflib.account.search import user_is_group
 
@@ -29,7 +31,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserToken:
 
 
 def depends_get_current_user_with_group(
-    group: Union[OCFSTAFF_GROUP, OCFOFFICERS_GROUP, OCFROOT_GROUP, OPSTAFF_GROUP],
+    group: Literal[OCFSTAFF_GROUP, OCFOFFICERS_GROUP, OCFROOT_GROUP, OPSTAFF_GROUP],
 ) -> Callable[[str], UserToken]:
     async def get_current_user_with_group(
         user_token: UserToken = Depends(get_current_user),
