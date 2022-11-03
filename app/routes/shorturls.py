@@ -10,7 +10,7 @@ from routes import router
 @router.get(
     "/shorturls/bounce/{slug}",
     status_code=status.HTTP_308_PERMANENT_REDIRECT,
-    tags=["misc"],
+    tags=["shorturls"],
 )
 async def bounce_shorturl(slug: str):
     if slug:

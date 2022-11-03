@@ -29,7 +29,7 @@ class PaperQuotaOutput(BaseModel):
     semesterly: int
 
 
-@router.get("/quotas/paper", tags=["account"], response_model=PaperQuotaOutput)
+@router.get("/account/quota/paper", tags=["account"], response_model=PaperQuotaOutput)
 async def get_paper_quota(current_user: UserToken = Depends(get_current_user)):
     try:
         with get_connection() as c:
@@ -56,7 +56,7 @@ class PaperRefundInput(BaseModel):
 
 
 @router.post(
-    "/quotas/paper",
+    "/account/quota/paper",
     tags=["account"],
     status_code=status.HTTP_204_NO_CONTENT,
 )

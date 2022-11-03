@@ -29,7 +29,7 @@ class VHostRequestInput(BaseModel):
 
 
 @router.post(
-    "/account/vhost",
+    "/account/hosting/vhost",
     tags=["account"],
     status_code=status.HTTP_204_NO_CONTENT,
     responses={

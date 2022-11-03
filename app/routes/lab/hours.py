@@ -20,12 +20,12 @@ class HoursOutput(BaseModel):
     close: Optional[str]
 
 
-@router.get("/hours/today", tags=["lab_hours"], response_model=HoursOutput)
+@router.get("/lab/hours/today", tags=["lab_hours"], response_model=HoursOutput)
 async def get_hours_today():
     return _get_hours_date()
 
 
-@router.get("/hours/{date}", tags=["lab_hours"], response_model=HoursOutput)
+@router.get("/lab/hours/{date}", tags=["lab_hours"], response_model=HoursOutput)
 async def get_hours_date(date: str):
     try:
         # date formatted as ISO 8601 (e.g. 2022-02-22)

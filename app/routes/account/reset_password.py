@@ -20,13 +20,13 @@ CALLINK_ERROR_MSG = (
 )
 
 
-class ChangePasswordInput(BaseModel):
+class ResetPasswordInput(BaseModel):
     account: str
     new_password: str
 
 
 @router.post(
-    "/account/change-password",
+    "/account/reset_password",
     tags=["account"],
     status_code=status.HTTP_204_NO_CONTENT,
     responses={
@@ -35,9 +35,7 @@ class ChangePasswordInput(BaseModel):
         status.HTTP_500_INTERNAL_SERVER_ERROR: {},
     },
 )
-async def change_password(
-    data: ChangePasswordInput, calnet_uid=Depends(get_calnet_uid)
-):
+async def reset_password(data: ResetPasswordInput, calnet_uid=Depends(get_calnet_uid)):
     accounts = get_accounts_for(calnet_uid)
     try:
         accounts += get_accounts_signatory_for(calnet_uid)

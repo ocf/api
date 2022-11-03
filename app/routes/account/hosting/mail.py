@@ -42,8 +42,8 @@ class VHostMailOutput(BaseModel):
     vhosts: List[MailVHost]
 
 
-@router.get("/account/vhost/mail", tags=["account"], response_model=VHostMailOutput)
-def vhost_mail(user_token: UserToken = Depends(get_current_group_user)):
+@router.get("/account/hosting/mail", tags=["account"], response_model=VHostMailOutput)
+def get_vhost_mail(user_token: UserToken = Depends(get_current_group_user)):
     user = user_token.username
     vhosts = []
 
@@ -70,7 +70,7 @@ class VHostMailUpdateInput(BaseModel):
 
 
 @router.post(
-    "/account/vhost/mail", status_code=status.HTTP_204_NO_CONTENT, tags=["account"]
+    "/account/hosting/mail", status_code=status.HTTP_204_NO_CONTENT, tags=["account"]
 )
 def vhost_mail_update(
     data: VHostMailUpdateInput, user_token: UserToken = Depends(get_current_group_user)
@@ -149,7 +149,7 @@ class VHostMailExportInput(BaseModel):
     domain: str
 
 
-@router.get("/account/vhost/mail/export", tags=["account"])
+@router.get("/account/hosting/mail/export", tags=["account"])
 def vhost_mail_csv_export(
     data: VHostMailExportInput, user_token: UserToken = Depends(get_current_group_user)
 ):
@@ -178,7 +178,7 @@ class VHostMailImportInput(BaseModel):
 
 
 @router.post(
-    "/account/vhost/mail/import",
+    "/account/hosting/mail/import",
     status_code=status.HTTP_204_NO_CONTENT,
     tags=["account"],
 )

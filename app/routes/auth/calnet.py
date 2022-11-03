@@ -10,7 +10,7 @@ from routes import router
 from utils.calnet import create_calnet_jwt, get_calnet_service_url
 
 
-@router.get("/login/calnet", tags=["account"])
+@router.get("/auth/calnet", tags=["auth"])
 async def calnet_login(
     next: Optional[str] = None,
     host: Optional[str] = Header(None),
@@ -23,7 +23,7 @@ async def calnet_login(
     return response
 
 
-@router.get("/login/calnet/callback", tags=["account"])
+@router.get("/auth/calnet/callback", tags=["auth"])
 async def calnet_login_callback(
     ticket: str,
     calnet_redirect_url: Optional[str] = Cookie(None),
