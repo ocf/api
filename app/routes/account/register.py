@@ -17,6 +17,7 @@ from ocflib.account.submission import NewAccountResponse
 from ocflib.ucb.groups import group_by_oid, groups_by_student_signat
 
 from fastapi import Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from routes import router
@@ -39,8 +40,17 @@ class RegisterAccountOutput(BaseModel):
     task_id: str
 
 
+class RegisterAccountError(BaseModel):
+    state: str
+    account: str
+    calnet_uid: str
+
+
 @router.post(
-    "/account/register", tags=["account"], response_model=RegisterAccountOutput
+    "/account/register",
+    tags=["account"],
+    response_model=RegisterAccountOutput,
+    responses={status.HTTP_403_FORBIDDEN: {"model": RegisterAccountError}},
 )
 async def register_account(
     data: RegisterAccountInput,
@@ -51,7 +61,9 @@ async def register_account(
 
     eligible_new_group_accounts, existing_group_accounts = {}, {}
     for group_oid in groups_for_user:
-        if not group_by_oid(group_oid)["accounts"] or group_oid in [
+        group_data = group_by_oid(group_oid)
+        group_accounts = group_data["accounts"] if group_data is not None else None
+        if not group_accounts or group_oid in [
             group[0] for group in TEST_GROUP_ACCOUNTS
         ]:
             eligible_new_group_accounts[group_oid] = groups_for_user[group_oid]
@@ -63,11 +75,14 @@ async def register_account(
         and not eligible_new_group_accounts
         and calnet_uid not in TESTER_CALNET_UIDS
     ):
-        return {
-            "state": "You already have an account",
-            "account": ", ".join(existing_accounts),
-            "calnet_uid": calnet_uid,
-        }
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={
+                "state": "You already have an account",
+                "account": ", ".join(existing_accounts),
+                "calnet_uid": calnet_uid,
+            },
+        )
 
     # ensure we can even find them in university LDAP
     # (alumni etc. might not be readable in LDAP but can still auth via CalNet)

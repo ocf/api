@@ -32,7 +32,7 @@ class PaperQuotaOutput(BaseModel):
 @router.get("/account/quota/paper", tags=["account"], response_model=PaperQuotaOutput)
 async def get_paper_quota(current_user: UserToken = Depends(get_current_user)):
     try:
-        with get_connection() as c:
+        with get_connection().cursor() as c:
             quota = get_quota(c, current_user.username)
             return {
                 "user": quota.user,
@@ -67,7 +67,7 @@ async def add_paper_refund(
     ),
 ):
     try:
-        with get_connection() as c:
+        with get_connection().cursor() as c:
             add_refund(
                 c,
                 Refund(

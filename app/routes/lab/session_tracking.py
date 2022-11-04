@@ -77,7 +77,7 @@ def _new_session(host: str, user: str) -> None:
 
     _close_sessions(host)
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "INSERT INTO `session` (`host`, `user`, `start`, `last_update`) "
             "VALUES (%s, %s, NOW(), NOW())",
@@ -88,20 +88,24 @@ def _new_session(host: str, user: str) -> None:
 def _session_exists(host: str, user: str) -> bool:
     """Returns whether an open session already exists for a given host and user."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "SELECT COUNT(*) AS `count` FROM `session` "
             "WHERE `host` = %s AND `user` = %s AND `end` IS NULL",
             (host, user),
         )
 
-        return c.fetchone()["count"] > 0
+        count = 0
+        row = c.fetchone()
+        if row is not None and "count" in row:
+            count = row["count"]  # type: ignore
+        return count > 0
 
 
 def _refresh_session(host: str, user: str) -> None:
     """Keep a session around if the user is still logged in."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "UPDATE `session` SET `last_update` = NOW() "
             "WHERE `host` = %s AND `user` = %s AND `end` IS NULL",
@@ -112,7 +116,7 @@ def _refresh_session(host: str, user: str) -> None:
 def _close_sessions(host: str) -> None:
     """Close all sessions for a particular host."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "UPDATE `session` SET `end` = NOW(), `last_update` = NOW() "
             "WHERE `host` = %s AND `end` IS NULL",

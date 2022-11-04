@@ -1,5 +1,4 @@
 import logging
-from typing import Callable
 
 from typing_extensions import Literal
 
@@ -8,12 +7,6 @@ from ocflib.account.search import user_is_group
 from fastapi import Depends, HTTPException, status
 
 from utils.auth import UserToken, decode_token, oauth2_scheme
-from utils.constants import (
-    OCFOFFICERS_GROUP,
-    OCFROOT_GROUP,
-    OCFSTAFF_GROUP,
-    OPSTAFF_GROUP,
-)
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserToken:
@@ -31,8 +24,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserToken:
 
 
 def depends_get_current_user_with_group(
-    group: Literal[OCFSTAFF_GROUP, OCFOFFICERS_GROUP, OCFROOT_GROUP, OPSTAFF_GROUP],
-) -> Callable[[str], UserToken]:
+    group: Literal["ocfstaff", "ocfofficers", "ocfroot", "opstaff"],
+):
     async def get_current_user_with_group(
         user_token: UserToken = Depends(get_current_user),
     ):

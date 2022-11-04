@@ -420,7 +420,7 @@ def _txn(**kwargs: Any) -> Generator[Any, None, None]:
         db=settings.ocfmail_db,
         autocommit=False,
         **kwargs,
-    ) as c:
+    ).cursor() as c:
         try:
             yield c
         except Exception:

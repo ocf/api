@@ -26,12 +26,12 @@ def _get_desktops_in_use() -> Set[str]:
     # https://github.com/ocf/ocflib/blob/90f9268a89ac9d53c089ab819c1aa95bdc38823d/ocflib/lab/ocfstats.sql#L70
     # we don't use users_in_lab_count_public because we're looking for
     # desktops in use, and the view does COUNT(DISTINCT users)
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "SELECT * FROM `desktops_in_use_public`;",
         )
 
-    return {hostname_from_domain(session["host"]) for session in c}
+    return {hostname_from_domain(session["host"]) for session in c}  # type: ignore
 
 
 class DesktopUsageOutput(BaseModel):

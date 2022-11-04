@@ -13,7 +13,7 @@ from utils.calnet import create_calnet_jwt, get_calnet_service_url
 @router.get("/auth/calnet", tags=["auth"])
 async def calnet_login(
     next: Optional[str] = None,
-    host: Optional[str] = Header(None),
+    host: str = Header(None),
 ):
     response = RedirectResponse(
         urljoin(CAS_URL, f"login?service={quote_plus(get_calnet_service_url(host))}")
@@ -27,7 +27,7 @@ async def calnet_login(
 async def calnet_login_callback(
     ticket: str,
     calnet_redirect_url: Optional[str] = Cookie(None),
-    host: Optional[str] = Header(None),
+    host: str = Header(None),
 ):
     uid = verify_ticket(ticket, get_calnet_service_url(host))
     if not uid:

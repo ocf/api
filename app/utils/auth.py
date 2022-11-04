@@ -1,6 +1,6 @@
 # Keycloak setup
 import logging
-from typing import List
+from typing import List, cast
 
 import requests
 from jose import jwt
@@ -99,12 +99,15 @@ class UserToken:
 
 
 def decode_token(token: str) -> UserToken:
-    raw_user_token: RawUserToken = jwt.decode(
-        token,
-        key=KEYCLOAK_PUBLIC_KEY,
-        audience=client_id,
-        algorithms=["RS256"],
-        options={"verify_aud": False, "require_exp": True},
+    raw_user_token = cast(
+        RawUserToken,
+        jwt.decode(
+            token,
+            key=KEYCLOAK_PUBLIC_KEY,
+            audience=client_id,
+            algorithms=["RS256"],
+            options={"verify_aud": False, "require_exp": True},
+        ),
     )
 
     return UserToken(raw_user_token)

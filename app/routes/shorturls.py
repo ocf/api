@@ -14,7 +14,7 @@ from routes import router
 )
 async def bounce_shorturl(slug: str):
     if slug:
-        with get_connection() as ctx:
+        with get_connection().cursor() as ctx:
             target = get_shorturl(ctx, slug)
 
         if target:

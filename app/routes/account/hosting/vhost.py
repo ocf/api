@@ -67,7 +67,10 @@ def request_vhost(
 
     # send email to hostmaster@ocf and redirect to success page
     attrs = user_attrs(user)
-    ip_addr = str(request.client)
+    account_title = "Unknown"
+    if attrs is not None and "cn" in attrs:
+        account_title = attrs["cn"][0]
+    ip_addr = request.client.host
 
     try:
         ip_reverse = socket.gethostbyaddr(str(request.client))[0]
@@ -101,7 +104,7 @@ def request_vhost(
         {full_path}"""
     ).format(
         user=user,
-        title=attrs["cn"][0],
+        title=account_title,
         requested_subdomain=data.subdomain,
         comments=data.comments,
         your_name=data.name,
