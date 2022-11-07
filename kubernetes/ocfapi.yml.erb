@@ -35,7 +35,7 @@ spec:
               value: "<%= version %>"
           envFrom:
             - secretRef:
-                name: ocfapi
+                name: api-config
           image: "docker.ocf.berkeley.edu/ocfapi:<%= version %>"
           ports:
             - containerPort: 80
