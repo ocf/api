@@ -6,12 +6,13 @@ from typing import Any, Dict, Optional
 from ocflib.infra.hosts import hosts_by_filter
 from ocflib.infra.net import ipv4_to_ipv6, is_ocf_ip
 from ocflib.lab.stats import get_connection
-from fastapi import Request, HTTPException, status
+
+from fastapi import HTTPException, Request, Response, status
 from pydantic import BaseModel
 
-from . import router
-from utils.config import get_settings
+from routes import router
 from utils.cache import cache
+from utils.config import get_settings
 
 settings = get_settings()
 
@@ -28,13 +29,13 @@ class SessionState(str, Enum):
     cleanup = "cleanup"
 
 
-class Session(BaseModel):
+class LogSessionInput(BaseModel):
     state: SessionState
     user: Optional[str] = None
 
 
-@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT)
-def log_session(session: Session, request: Request):
+@router.post("/session/log", status_code=status.HTTP_204_NO_CONTENT, tags=["misc"])
+def log_session(session: LogSessionInput, request: Request):
     """Primary API endpoint for session tracking.
 
     Desktops have a cronjob that calls this endpoint: https://git.io/vpIKX
@@ -65,7 +66,7 @@ def log_session(session: Session, request: Request):
         else:
             _new_session(host, user)
 
-        return
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     except (KeyError, ValueError) as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e)
@@ -76,7 +77,7 @@ def _new_session(host: str, user: str) -> None:
 
     _close_sessions(host)
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "INSERT INTO `session` (`host`, `user`, `start`, `last_update`) "
             "VALUES (%s, %s, NOW(), NOW())",
@@ -87,20 +88,24 @@ def _new_session(host: str, user: str) -> None:
 def _session_exists(host: str, user: str) -> bool:
     """Returns whether an open session already exists for a given host and user."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "SELECT COUNT(*) AS `count` FROM `session` "
             "WHERE `host` = %s AND `user` = %s AND `end` IS NULL",
             (host, user),
         )
 
-        return c.fetchone()["count"] > 0
+        count = 0
+        row = c.fetchone()
+        if row is not None and "count" in row:
+            count = row["count"]  # type: ignore
+        return count > 0
 
 
 def _refresh_session(host: str, user: str) -> None:
     """Keep a session around if the user is still logged in."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "UPDATE `session` SET `last_update` = NOW() "
             "WHERE `host` = %s AND `user` = %s AND `end` IS NULL",
@@ -111,7 +116,7 @@ def _refresh_session(host: str, user: str) -> None:
 def _close_sessions(host: str) -> None:
     """Close all sessions for a particular host."""
 
-    with get_connection() as c:
+    with get_connection().cursor() as c:
         c.execute(
             "UPDATE `session` SET `end` = NOW(), `last_update` = NOW() "
             "WHERE `host` = %s AND `end` IS NULL",

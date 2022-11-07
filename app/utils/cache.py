@@ -8,8 +8,8 @@ from typing import Any, Callable, Dict, Hashable, Iterable, Optional, Tuple
 
 from cached_property import cached_property
 
-from .config import get_settings
-from .redis import get_redis_connection
+from utils.config import get_settings
+from utils.redis import get_redis_connection
 
 _logger = logging.getLogger(__name__)
 
@@ -25,7 +25,8 @@ def cache_lookup(key: Hashable) -> Any:
     cache_miss_sentinel: Dict[Any, Any] = {}
     try:
         r = get_redis_connection()
-        retval = r.get(key, cache_miss_sentinel)
+        # "Hashable" is incompatible with "str"
+        retval = r.get(key) or cache_miss_sentinel  # type: ignore
     except Exception:
         retval = cache_miss_sentinel
 
@@ -76,7 +77,8 @@ def cache_lookup_with_fallback(
         result = fallback()
         try:
             r = get_redis_connection()
-            r.set(key, result, ttl)
+            # "Hashable" is incompatible with "str"
+            r.set(key, result, ttl)  # type: ignore
         except Exception:
             pass
 
