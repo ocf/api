@@ -31,7 +31,7 @@ async def calnet_login_callback(
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "got bad ticket")
     jwt = create_calnet_jwt(uid)
     if calnet_redirect_url:
-        response = RedirectResponse(calnet_redirect_url)
+        response = RedirectResponse(calnet_redirect_url + "#ocfapi_calnet_token=" + jwt)
         response.delete_cookie("calnet_redirect_url")
         response.set_cookie(
             "ocfapi_calnet_token",
