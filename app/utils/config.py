@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     celery_broker: str = "redis://127.0.0.1:6378"
     celery_backend: str = "redis://127.0.0.1:6378"
 
+    calnet_jwt_secret: str = "sshverysecret"
+
     debug: bool = False
     version: str = "dev"
 

@@ -1,4 +1,3 @@
-import os
 import re
 from math import floor
 from time import time
@@ -15,7 +14,6 @@ from utils.constants import API_HOST
 
 settings = get_settings()
 
-__JWT_SECRET = os.getrandom(32).hex() if not settings.debug else "waddles"
 JWT_AUDIENCE = "ocfapi_calnet"
 
 calnet_jwt_auth_scheme = HTTPBearer(
@@ -48,7 +46,7 @@ def create_calnet_jwt(uid: Union[int, str]) -> str:
             "iat": current_time,
             "exp": current_time + 60 * 30,  # 60 sec * 30 min
         },
-        __JWT_SECRET,
+        settings.calnet_jwt_secret,
         algorithm="HS256",
     )
 
@@ -74,7 +72,7 @@ def decode_calnet_jwt(calnet_jwt: str) -> Dict[str, Union[str, int]]:
     # not as good as what we can do ourselves
     return jwt.decode(
         calnet_jwt,
-        __JWT_SECRET,
+        settings.calnet_jwt_secret,
         algorithms="HS256",
         options={
             "verify_signature": True,
