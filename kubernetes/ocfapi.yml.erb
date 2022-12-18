@@ -33,6 +33,8 @@ spec:
               value: "4"
             - name: VERSION
               value: "<%= version %>"
+            - name: FORWARDED_ALLOW_IPS
+              value: "*"
           envFrom:
             - secretRef:
                 name: api-config
