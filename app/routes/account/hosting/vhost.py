@@ -123,9 +123,11 @@ def request_vhost(
     try:
         settings = get_settings()
         send_mail(
-            "hostmaster@ocf.berkeley.edu"
-            if not settings.debug
-            else current_user_formatted_email(),
+            (
+                "hostmaster@ocf.berkeley.edu"
+                if not settings.debug
+                else current_user_formatted_email()
+            ),
             subject,
             message,
             sender=data.email,

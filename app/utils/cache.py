@@ -1,4 +1,5 @@
 """Caching decorators for ocfweb."""
+
 import logging
 import math
 from collections import namedtuple
